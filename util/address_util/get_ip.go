@@ -4,9 +4,9 @@ import (
 	"cf-ddns/bu_const"
 	"errors"
 	"io"
-	"log"
 	"net"
 	"net/http"
+	"strings"
 )
 
 func GetIP() (ip string, err error) {
@@ -28,15 +28,13 @@ func GetIP() (ip string, err error) {
 		return
 	}
 
-	ip = string(body)
+	ip = strings.TrimSpace(string(body))
 
 	return
 }
 
 func GetIPDNSType(ipStr string) (dnsType bu_const.DNSType, err error) {
-	log.Printf("ipStr: %v", ipStr)
 	ip := net.ParseIP(ipStr)
-	log.Printf("ip: %v", ip)
 	if ip == nil {
 		return bu_const.DNSTypeInvalid, errors.New("invalid ip")
 	} else if ipv4 := ip.To4(); ipv4 != nil {
