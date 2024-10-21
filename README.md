@@ -1,1 +1,3 @@
-# Cloudflare DDNS Tool
+# cfDDNS
+
+A Cloudflare DDNS Tool
