@@ -38,8 +38,6 @@ func InitConfig(configFilePath string) {
 	}
 	defer watcher.Close()
 
-	done := make(chan bool)
-
 	go func() {
 		for {
 			select {
@@ -74,7 +72,4 @@ func InitConfig(configFilePath string) {
 		log.Fatal("Error reading initial config:", err)
 	}
 	log.Println("Initial config loaded successfully")
-
-	// 阻塞主程序，以便 goroutine 可以继续运行
-	<-done
 }

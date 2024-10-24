@@ -1,6 +1,7 @@
 package tray
 
 import (
+	"cf-ddns/cloudflare"
 	"cf-ddns/tray/icon"
 	"fmt"
 	"github.com/getlantern/systray"
@@ -20,6 +21,7 @@ func onReady() {
 		mPortal.Disable()
 		mTaskCenter := systray.AddMenuItem("Edit DDNS Tasks", "open task center")
 		mTaskCenter.Disable()
+		mDoUpdateCFDDNS := systray.AddMenuItem("Update DDNS", "manually update Cloudflare DDNS now")
 		systray.AddSeparator()
 		mRunning := systray.AddMenuItem("Stop Service [Started]", "stop backend config service, and all DDNS tasks")
 		mRunning.Disable()
@@ -36,6 +38,25 @@ func onReady() {
 				open.Run("http://localhost:7879/#/")
 			case <-mTaskCenter.ClickedCh:
 				open.Run("http://localhost:7879/#/tasks")
+			case <-mDoUpdateCFDDNS.ClickedCh:
+				mDoUpdateCFDDNS.SetTitle("Update DDNS [Executing...]")
+				mDoUpdateCFDDNS.SetTooltip("Executing DDNS updating, please wait...")
+				mDoUpdateCFDDNS.Disable()
+				cloudflare.DoUpdateCFDDNS(
+					func() {
+						mDoUpdateCFDDNS.SetTitle("Update DDNS [Success!]")
+						mDoUpdateCFDDNS.Enable()
+						time.Sleep(10 * time.Second)
+						mDoUpdateCFDDNS.SetTitle("Update DDNS")
+					},
+					func(err error) {
+						mDoUpdateCFDDNS.SetTitle("Update DDNS [Failed!]")
+						mDoUpdateCFDDNS.SetTooltip(err.Error())
+						mDoUpdateCFDDNS.Enable()
+						time.Sleep(10 * time.Second)
+						mDoUpdateCFDDNS.SetTitle("Update DDNS")
+					},
+				)
 			case <-mRunning.ClickedCh:
 				mRunning.SetTitle("Start Service [Stopped]")
 				mRunning.SetTooltip("start backend config service, and all DDNS tasks")
