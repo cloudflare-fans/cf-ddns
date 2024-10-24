@@ -1,6 +1,7 @@
 package config
 
 import (
+	"github.com/fsnotify/fsnotify"
 	"gopkg.in/yaml.v3"
 	"log"
 	"os"
@@ -18,15 +19,62 @@ type config struct {
 
 var GlobalConfig config
 
-func InitConfig(configFilePath string) {
+func readConfig(configFilePath string) error {
 	data, err := os.ReadFile(configFilePath)
 	if err != nil {
-		log.Fatalf("无法读取配置文件: %v", err)
-		return
+		return err
 	}
 	err = yaml.Unmarshal(data, &GlobalConfig)
 	if err != nil {
-		log.Fatalf("无法应用配置文件: %v", err)
-		return
+		return err
 	}
+	return nil
+}
+
+func InitConfig(configFilePath string) {
+	watcher, err := fsnotify.NewWatcher()
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer watcher.Close()
+
+	done := make(chan bool)
+
+	go func() {
+		for {
+			select {
+			case event, ok := <-watcher.Events:
+				if !ok {
+					return
+				}
+				if event.Op&fsnotify.Write == fsnotify.Write || event.Op&fsnotify.Create == fsnotify.Create {
+					log.Println("Config file modified or created, reloading...")
+					err := readConfig(configFilePath)
+					if err != nil {
+						log.Fatal(err)
+					}
+				}
+			case err, ok := <-watcher.Errors:
+				if !ok {
+					return
+				}
+				log.Println("error:", err)
+			}
+		}
+	}()
+
+	err = watcher.Add(configFilePath)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// 首次读取配置
+	err = readConfig(configFilePath)
+	if err != nil {
+		log.Fatal("Error reading initial config:", err)
+	}
+	log.Println("Initial config loaded successfully")
+
+	// 阻塞主程序，以便 goroutine 可以继续运行
+	<-done
 }
