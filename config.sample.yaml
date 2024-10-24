@@ -2,3 +2,4 @@ targets:
   - dns_name: "mydns.example.com"
     zone_id: "c98b583b3ed94a6994b631dd5e133686"
     token: "xxxxxxxxxxxxx"
+    update_every: "1d"

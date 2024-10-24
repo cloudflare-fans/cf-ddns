@@ -8,9 +8,10 @@ import (
 )
 
 type cloudflareTarget struct {
-	DNSName string `json:"dns_name,omitempty" yaml:"dns_name,omitempty"`
-	ZoneID  string `json:"zone_id,omitempty" yaml:"zone_id,omitempty"`
-	Token   string `json:"token,omitempty" yaml:"token,omitempty"`
+	DNSName     string `json:"dns_name,omitempty" yaml:"dns_name,omitempty"`
+	ZoneID      string `json:"zone_id,omitempty" yaml:"zone_id,omitempty"`
+	Token       string `json:"token,omitempty" yaml:"token,omitempty"`
+	UpdateEvery string `json:"update_every,omitempty" yaml:"update_every,omitempty"`
 }
 
 type config struct {
