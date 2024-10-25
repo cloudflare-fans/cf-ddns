@@ -49,12 +49,17 @@ func (_this *config) readConfig(configFilePath string) error {
 	return nil
 }
 
-func (_this *config) InitConfig(configFilePath string) {
+func (_this *config) InitConfig(configFilePath string) error {
 	watcher, err := fsnotify.NewWatcher()
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer watcher.Close()
+	defer func(watcher *fsnotify.Watcher) {
+		err := watcher.Close()
+		if err != nil {
+			panic(err)
+		}
+	}(watcher)
 
 	go func() {
 		for {
@@ -82,14 +87,17 @@ func (_this *config) InitConfig(configFilePath string) {
 	err = watcher.Add(configFilePath)
 	if err != nil {
 		log.Fatal(err)
+		return err
 	}
 
 	err = _this.readConfig(configFilePath)
 	if err != nil {
 		log.Fatal("Error reading initial config:", err)
+		return err
 	}
 	log.Println("Initial config loaded successfully")
 	_this.initialized = true
+	return nil
 }
 
 // detectCurrentIP 通过云端接口探测现在的 IP 地址

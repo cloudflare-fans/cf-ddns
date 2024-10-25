@@ -8,8 +8,11 @@ import (
 var configFilePath = "config.yaml"
 
 func init() {
-	cloudflare.GlobalConfig.InitConfig(configFilePath)
-	err := cloudflare.DDNSScheduleConfigs.InitializeSchedule()
+	err := cloudflare.GlobalConfig.InitConfig(configFilePath)
+	if err != nil {
+		panic(err)
+	}
+	err = cloudflare.DDNSScheduleConfigs.InitializeSchedule()
 	if err != nil {
 		panic(err)
 	}
