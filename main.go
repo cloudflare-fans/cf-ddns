@@ -1,14 +1,18 @@
 package main
 
 import (
-	"cf-ddns/config"
+	"cf-ddns/cloudflare"
 	"cf-ddns/tray"
 )
 
 var configFilePath = "config.yaml"
 
 func init() {
-	config.InitConfig(configFilePath)
+	cloudflare.GlobalConfig.InitConfig(configFilePath)
+	err := cloudflare.DDNSScheduleConfigs.InitializeSchedule()
+	if err != nil {
+		panic(err)
+	}
 }
 
 func main() {

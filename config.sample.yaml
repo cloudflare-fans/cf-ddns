@@ -2,4 +2,6 @@ targets:
   - dns_name: "mydns.example.com"
     zone_id: "c98b583b3ed94a6994b631dd5e133686"
     token: "xxxxxxxxxxxxx"
-    update_every: "1d"
+    update_every: "1d" # formatted as prometheus type
+    ip_detection_rule:
+      ip_type: "ipv6-ony" # default: ipv6-only; options: ipv4, ipv4-only, ipv6, ipv6-only
