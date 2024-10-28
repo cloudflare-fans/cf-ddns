@@ -14,7 +14,7 @@ cross-env:
 build-linux-arm64: debian-pack
 	docker buildx build -f Dockerfile_arm64 --platform linux/arm64 -t cf-ddns:latest . --load
 	docker run -d --name cf-ddns cf-ddns:latest
-	docker cp /cf-ddns ./target/
+	docker cp cf-ddns:/cf-ddns ./target/
 	docker stop cf-ddns
 	docker rm cf-ddns
 
@@ -22,7 +22,7 @@ build-linux-arm64: debian-pack
 build-linux-amd64: debian-pack
 	docker buildx build -f Dockerfile_amd64 --platform linux/amd64 -t cf-ddns:latest . --load
 	docker run -d --name cf-ddns cf-ddns:latest
-	docker cp /cf-ddns ./target/
+	docker cp cf-ddns:/cf-ddns ./target/
 	docker stop cf-ddns
 	docker rm cf-ddns
 
