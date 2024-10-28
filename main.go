@@ -2,7 +2,6 @@ package main
 
 import (
 	"cf-ddns/cloudflare"
-	"cf-ddns/tray"
 )
 
 var configFilePath = "config.yaml"
@@ -19,5 +18,4 @@ func init() {
 }
 
 func main() {
-	tray.InitTray()
 }
