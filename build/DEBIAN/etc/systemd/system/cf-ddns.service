@@ -1,0 +1,12 @@
+[Unit]
+Description=Cloudflare DDNS tool
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/usr/local/cf-ddns/
+ExecStart=/usr/local/cf-ddns/bin/cf-ddns
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

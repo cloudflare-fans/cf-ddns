@@ -1,0 +1,7 @@
+Package: cf-ddns
+Version: 0.0.1
+Architecture: amd64
+Maintainer: Cloudflare Fans <secret@github.com>
+Section: utils
+Priority: optional
+Description: Cloudflare DDNS tool.
