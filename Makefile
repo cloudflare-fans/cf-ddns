@@ -1,28 +1,23 @@
 .PHONY: all
 all: clean build
 
-.PHONY: debian-pack
-debian-pack:
-	mkdir -p ./target/
-	cp -r build/DEBIAN ./target/
-
 .PHONY: cross-env
 cross-env:
 	docker buildx create --use --name default-cross default
 
 .PHONY: build-linux-arm64
-build-linux-arm64: debian-pack
+build-linux-arm64:
 	docker buildx build -f Dockerfile_arm64 --platform linux/arm64 -t cf-ddns:latest . --load
 	docker run -d --name cf-ddns cf-ddns:latest
-	docker cp cf-ddns:/cf-ddns ./target/
+	docker cp cf-ddns:/cf-ddns_1.0.0_arm64.deb ./target/
 	docker stop cf-ddns
 	docker rm cf-ddns
 
 .PHONY: build-linux-amd64
-build-linux-amd64: debian-pack
+build-linux-amd64:
 	docker buildx build -f Dockerfile_amd64 --platform linux/amd64 -t cf-ddns:latest . --load
 	docker run -d --name cf-ddns cf-ddns:latest
-	docker cp cf-ddns:/cf-ddns ./target/
+	docker cp cf-ddns:/cf-ddns_1.0.0_amd64.deb ./target/
 	docker stop cf-ddns
 	docker rm cf-ddns
 
