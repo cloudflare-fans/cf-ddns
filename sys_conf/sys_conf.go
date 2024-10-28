@@ -8,7 +8,7 @@ import (
 type sysConf struct {
 	Server struct {
 		Listen string `yaml:"listen"`
-	} `yaml:"web_server"`
+	} `yaml:"server"`
 }
 
 var GlobalSystemConf sysConf
