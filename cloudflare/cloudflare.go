@@ -2,12 +2,12 @@ package cloudflare
 
 import (
 	"bytes"
-	"cf-ddns/bu_const"
-	"cf-ddns/bu_type"
-	"cf-ddns/util/address_util"
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/cloudflare-fans/cf-ddns/bu_const"
+	"github.com/cloudflare-fans/cf-ddns/bu_type"
+	"github.com/cloudflare-fans/cf-ddns/util/address_util"
 	"github.com/fsnotify/fsnotify"
 	"gopkg.in/yaml.v3"
 	"io"

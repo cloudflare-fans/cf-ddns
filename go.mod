@@ -1,4 +1,4 @@
-module cf-ddns
+module github.com/cloudflare-fans/cf-ddns
 
 go 1.23.0
 

@@ -1,8 +1,8 @@
 package address_util
 
 import (
-	"cf-ddns/bu_const"
 	"errors"
+	"github.com/cloudflare-fans/cf-ddns/bu_const"
 	"io"
 	"net"
 	"net/http"

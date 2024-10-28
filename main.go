@@ -1,7 +1,7 @@
 package main
 
 import (
-	"cf-ddns/cloudflare"
+	"github.com/cloudflare-fans/cf-ddns/cloudflare"
 )
 
 var configFilePath = "config.yaml"

@@ -1,8 +1,8 @@
 package cloudflare
 
 import (
-	"cf-ddns/util/duration_util"
 	"errors"
+	"github.com/cloudflare-fans/cf-ddns/util/duration_util"
 	"time"
 )
 

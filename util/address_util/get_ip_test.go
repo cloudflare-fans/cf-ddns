@@ -1,7 +1,7 @@
 package address_util
 
 import (
-	"cf-ddns/bu_const"
+	"github.com/cloudflare-fans/cf-ddns/bu_const"
 	"testing"
 )
 
