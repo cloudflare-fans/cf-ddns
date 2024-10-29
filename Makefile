@@ -3,21 +3,24 @@ all: clean build
 
 .PHONY: cross-env
 cross-env:
-	docker buildx create --use --name default-cross default
+	- docker buildx create --use --name default-cross default
+
+.PHONY: clean-container
+clean-container:
+	- docker stop cf-ddns && docker rm cf-ddns
 
 .PHONY: build-linux-arm64
-build-linux-arm64:
+build-linux-arm64: cross-env clean-container
 	docker buildx build -f Dockerfile_arm64 --platform linux/arm64 -t cf-ddns:latest . --load
 	docker run -d --name cf-ddns cf-ddns:latest
-	docker cp cf-ddns:/cf-ddns_1.0.0_arm64.deb ./target/
-	docker stop cf-ddns
-	docker rm cf-ddns
+	docker cp cf-ddns:/cf-ddns.deb ./target/cf-ddns_1.0.0_arm64.deb
+	docker stop cf-ddns && docker rm cf-ddns
 
 .PHONY: build-linux-amd64
-build-linux-amd64:
+build-linux-amd64: cross-env clean-container
 	docker buildx build -f Dockerfile_amd64 --platform linux/amd64 -t cf-ddns:latest . --load
 	docker run -d --name cf-ddns cf-ddns:latest
-	docker cp cf-ddns:/cf-ddns_1.0.0_amd64.deb ./target/
+	docker cp cf-ddns:/cf-ddns.deb ./target/cf-ddns_1.0.0_amd64.deb
 	docker stop cf-ddns
 	docker rm cf-ddns
 

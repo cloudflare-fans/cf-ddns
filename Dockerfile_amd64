@@ -28,23 +28,24 @@ WORKDIR $GOPATH/src/$APP_NAME
 
 RUN go build -v -o $GOPATH/bin/$APP_NAME $GOPATH/src/$APP_NAME/
 
-FROM ubuntu:noble AS run-env
+FROM ubuntu:noble AS pack-env
 
 # Set environment variable
 ENV APP_NAME=cf-ddns
 ENV BUILD_STEP_GOPATH=/root/go
 
-# Copy linux/amd64 build files
-RUN mkdir ./${APP_NAME}
-COPY build/debian/* ./${APP_NAME}
-
-# Copy only required data into this image
-COPY --from=build-env $BUILD_STEP_GOPATH/bin/$APP_NAME ./${APP_NAME}/usr/local/cf-ddns
-
 # Install .deb package build tools
 RUN apt update && \
-    apt install -y dpkg-dev build-essential && \
-    dpkg-deb --build ./${APP_NAME}
+    apt install -y dpkg-dev build-essential
+
+# Copy linux/amd64 build files
+COPY ./build/debian/ ./${APP_NAME}/
+
+# Copy only required data into this image
+COPY --from=build-env $BUILD_STEP_GOPATH/bin/$APP_NAME ./${APP_NAME}/usr/local/${APP_NAME}/
+
+# build deb file
+RUN dpkg-deb --build ./${APP_NAME}/
 
 # Sleep to keep container
-CMD ["sleep", "1m"]
+CMD ["sleep", "365d"]
