@@ -40,6 +40,8 @@ RUN apt update && \
 
 # Copy linux/amd64 build files
 COPY ./build/debian/ ./${APP_NAME}/
+COPY ./config-system.sample.yaml ./${APP_NAME}/etc/${APP_NAME}/config-system.yaml
+COPY ./config.sample.yaml ./${APP_NAME}/etc/${APP_NAME}/config.yaml
 
 # Copy only required data into this image
 COPY --from=build-env $BUILD_STEP_GOPATH/bin/$APP_NAME ./${APP_NAME}/usr/local/${APP_NAME}/
